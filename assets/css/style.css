@@ -201,3 +201,8 @@ footer {
     color: #fff;
     cursor: pointer;
 }
+
+/* ===== Tabel Responsif ===== */
+.table-responsive {
+    overflow-x: auto;
+}
