@@ -251,3 +251,9 @@ footer {
         max-width: 100%;
     }
 }
+
+/* Breakpoint untuk layar monitor sangat lebar */
+@media (min-width: 1400px) {
+  main {max-width: 1000px;
+  }
+}
