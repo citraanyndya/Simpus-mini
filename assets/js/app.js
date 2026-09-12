@@ -18,6 +18,7 @@ function initHapusConfirm() {
             const yakin = confirm("Yakin ingin menghapus \"" + nama + "\"?");
             if (yakin && row) {
                 row.remove();
+                countFilter();
             }
         });
     });
@@ -38,7 +39,22 @@ function initTableFilter() {
             kolomPertama.textContent.toLowerCase() : "";
             row.style.display = teks.includes(keyword) ? "" : "none";
         });
+        countFilter();
     });
+}
+
+function countFilter() {
+    const counter = document.getElementById("filter-count");
+    const table = document.querySelector(".table-responsive table");
+    if (!counter || !table) return;
+
+    const semuaBaris = table.querySelectorAll("tbody tr");
+    const totalBaris = semuaBaris.length;
+    let tampil = 0;
+    semuaBaris.forEach(function (row) {
+        if (row.style.display !== "none") tampil++;
+    });
+    counter.textContent = "Menampilkan " + tampil + " data dari " + totalBaris + " data.";
 }
 
 // ===== Validasi form (client-side) =====
@@ -124,4 +140,5 @@ document.addEventListener("DOMContentLoaded", function () {
     initHapusConfirm();
     initTableFilter();
     initValidasiForm();
+    countFilter();
 });
