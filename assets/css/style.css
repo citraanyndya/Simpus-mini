@@ -186,10 +186,6 @@ footer {
     overflow-x: auto;
 }
 
-.nav-toggle {
-      display: none;
-    }
-    
 /* ===== Hamburger Menu (JS-driven) ===== */
 .nav-toggle-label {
     display: none;
