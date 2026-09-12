@@ -31,6 +31,9 @@ header {
     justify-content: space-between;
     flex-wrap: wrap;
 }
+header nav {
+  transition: all 0.5s ease;
+}
 
 header h1 {
     font-size: 1.4rem;
@@ -237,14 +240,17 @@ footer {
     }
 
     header nav {
-        display: none;
+        max-height: 0;
+        overflow: hidden;
+        display: block;
         width: 100%;
         order: 3;
-        margin-top: 1rem;
+        margin-top: 0;
     }
 
     header nav.nav-open {
-        display: block;
+        max-height: 300px;
+        margin-top: 1rem;
     }
 
     header nav ul {
