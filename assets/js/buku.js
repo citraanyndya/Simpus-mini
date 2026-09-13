@@ -1,5 +1,5 @@
 function muatDaftarBuku() {
-    muatDataGenerik("../data/buku.json", ["judul", "pengarang", "tahun", "stok"]);
+    muatDataGenerik("../data/buku.json", ["judul", "pengarang", "tahun", "kategori", "stok"]);
 }
 
 document.addEventListener("DOMContentLoaded", function () {
