@@ -18,6 +18,19 @@ if ($nama === '') {
 if ($alamat === '') {
     $errors[] = "Alamat wajib diisi";
 }
+
+if ($no_hp === '') {
+    $errors[] = "No HP wajib diisi.";
+} elseif (!preg_match('/^[0-9]+$/', $no_hp)) {
+    $errors[] = "No HP tidak valid, hanya boleh diisi dengan angka";
+}
+
+if ($email === '') {
+    $errors[] = "Email wajib diisi.";
+} elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    $errors[] = "Format email tidak valid.";
+}
+
 if (!is_numeric($tahun_bergabung) || $tahun_bergabung < 1900 || $tahun_bergabung > 2026) {
     $errors[] = "Tahun Bergabung harus diantara 1900 sampai 2026";
 }
@@ -28,7 +41,7 @@ if (!empty($errors)) {
     exit;
 }
 
-if (!isset($SESSION['anggota'])) {
+if (!isset($_SESSION['anggota'])) {
     $_SESSION['anggota'] = [];
 }
 

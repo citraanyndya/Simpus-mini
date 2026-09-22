@@ -1,12 +1,17 @@
 <?php
-$page_title = "Tambah Buku";
+$page_title = "Tambah Anggota";
 include __DIR__ . '/../includes/header.php';
 
 $flash = $_SESSION['flash'] ?? null;
 unset($_SESSION['flash']);
 ?>
         <section>
-            <h2>Tambah Buku</h2>
+            <h2>Tambah Anggota</h2>
+            <?php if ($flash): ?>
+                <p class="flash flash-<?php echo $flash['type']; ?>">
+                    <?php echo $flash['pesan']; ?></p>
+                    <?php endif; ?>
+                    
             <form id="form-tambah" method="post" action="proses_tambah.php" novalidate>
                 <p>
                     <label for="no_anggota">No. Anggota</label>
