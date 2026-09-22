@@ -18,10 +18,12 @@ if ($pengarang === '') {
 if (!is_numeric($tahun) || $tahun < 1900 || $tahun > 2026) {
     $errors[] = "Tahun harus diantara 1900 sampai 2026";
 }
+if ($isbn !== '' && !preg_match('/^[0-9-]+$', $isbn)) {
+    $errors[] = "ISBN hanya boleh berisi angka dan tanda hubung";
+}
 if (!is_numeric($stok) || $stok < 0) {
     $errors[] = "Stok tidak boleh negatif";
 }
-
 if (!empty($errors)) {
     $_SESSION['flash'] = ['type' => 'error', 'pesan' => implode(' ', $errors)];
     header('Location: tambah.php');
