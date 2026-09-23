@@ -5,7 +5,7 @@ require __DIR__ . '/../includes/koneksi.php';
 
 $flash = $_SESSION['flash'] ?? null;
 unset($_SESSION['flash']);
-$daftarAnggota = $pdo->query("SELECT * FROM anggota ORDER BY id DESC")->fetchAll(PDO::FETCH_ASSOC);
+$daftarBuku = $pdo->query("SELECT * FROM buku ORDER BY id DESC")->fetchAll(PDO::FETCH_ASSOC);
 ?>
         <section>
             <h2>Daftar Buku</h2>
@@ -27,6 +27,8 @@ $daftarAnggota = $pdo->query("SELECT * FROM anggota ORDER BY id DESC")->fetchAll
                         <th>Pengarang</th>
                         <th>Tahun</th>
                         <th>Stok</th>
+                        <th>Kategori</th>
+                        <th>Ditambahkan</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -42,6 +44,9 @@ $daftarAnggota = $pdo->query("SELECT * FROM anggota ORDER BY id DESC")->fetchAll
                             <td><?php echo $buku['pengarang']; ?></td>
                             <td><?php echo $buku['tahun']; ?></td>
                             <td><?php echo $buku['stok']; ?></td>
+                            <td><?php echo $buku['kategori']; ?></td>
+                            <td><?php echo !empty($buku['tanggal_ditambahkan']) ? date('d M Y H:i', strtotime($buku['tanggal_ditambahkan'])) : '-'; ?>
+                                </td>
                             <td>
                                 <button type="button">Edit</button>
                                 <button type="button" class="btn-hapus">Hapus</button>

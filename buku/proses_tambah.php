@@ -19,7 +19,7 @@ if ($pengarang === '') {
 if (!is_numeric($tahun) || $tahun < 1900 || $tahun > 2026) {
     $errors[] = "Tahun harus diantara 1900 sampai 2026";
 }
-if ($isbn !== '' && !preg_match('/^[0-9-]+$', $isbn)) {
+if ($isbn !== '' && !preg_match('/^[0-9-]+$/', $isbn)) {
     $errors[] = "ISBN hanya boleh berisi angka dan tanda hubung";
 }
 if (!is_numeric($stok) || $stok < 0) {
@@ -32,8 +32,8 @@ if (!empty($errors)) {
 }
 
 $stmt = $pdo->prepare(
-    "INSERT INTO buku (judul, pengarang, tahun, isbn, kategori) VALUES
-    (:judul, :pengarang, :tahun, :isbn, :kategori)
+    "INSERT INTO buku (judul, pengarang, tahun, isbn, stok, kategori) VALUES
+    (:judul, :pengarang, :tahun, :isbn, :stok, :kategori)
     RETURNING id"
 );
 
@@ -43,7 +43,7 @@ $stmt->execute([
     'tahun' => (int) $tahun,
     'isbn' => $isbn,
     'stok' => (int) $stok,
-    'kategori' => (int) $kategori,
+    'kategori' => $kategori,
 ]);
 
 $_SESSION['flash'] = ['type' => 'success', 'pesan' => 'Buku berhasil ditambahkan'];
