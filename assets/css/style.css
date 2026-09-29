@@ -130,14 +130,43 @@ td button {
     font-size: 0.85rem;
 }
 
-td button:first-of-type {
+/* ===== Tombol Aksi Tabel ===== */
+td a.btn-edit {
+    display: inline-block;
+    padding: 0.35rem 0.7rem;
+    margin-right: 0.35rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
     background-color: #f0ad4e;
     color: #fff;
+    text-decoration: none;
+    vertical-align: middle;
 }
 
-td button:last-of-type {
+td button.btn-detail {
+    padding: 0.35rem 0.7rem;
+    margin-right: 0.35rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    background-color: #1d5b8a;
+    color: #fff;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+td form.form-hapus {
+    display: inline;
+}
+
+td form.form-hapus button.btn-hapus {
     background-color: #d9534f;
     color: #fff;
+    padding: 0.35rem 0.7rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    vertical-align: middle;
 }
 
 /* ===== Form ===== */
@@ -229,6 +258,29 @@ footer {
     border-radius: 4px;
 }
 
+.search-box form {
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-end;
+    flex-wrap: wrap;
+}
+
+.search-box form span {
+    padding: 0;
+    border: none;
+    background: none;
+    color: inherit;
+}
+
+.search-box form button[type="submit"] {
+    background-color: #1d5b8a;
+    color: #fff;
+    border: none;
+    padding: 0.55rem 1.2rem;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
 /* ===== Flash Message ===== */
 .flash {
     padding: 0.75rem 1rem;
@@ -246,6 +298,27 @@ footer {
     background-color: #f8d7da;
     color: #721c24;
 }
+
+.pagination {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.pagination a {
+    padding: 0.4rem 0.75rem;
+    border: 1px solid #cdd4da;
+    border-radius: 4px;
+    color: #1d5b8a;
+}
+
+.pagination a.active {
+    background-color: #1d5b8a;
+    color: #fff;
+    border-color: #1d5b8a;
+}
+
 
 /* ===== Responsive Breakpoints ===== */
 
