@@ -1,12 +1,12 @@
 <?php
 require __DIR__ . '/../includes/auth.php';
+require __DIR__ . '/../includes/csrf.php';
+require __DIR__ . '/../includes/koneksi.php';
 
 if ($_SESSION['role'] !== 'admin') {
     header('Location: list.php');
     exit;
 }
-
-require __DIR__ . '/../includes/koneksi.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: list.php');

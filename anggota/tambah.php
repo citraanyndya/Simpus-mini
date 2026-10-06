@@ -9,11 +9,12 @@ unset($_SESSION['flash']);
         <section>
             <h2>Tambah Anggota</h2>
             <?php if ($flash): ?>
-                <p class="flash flash-<?php echo $flash['type']; ?>">
-                    <?php echo $flash['pesan']; ?></p>
+                <p class="flash flash-<?php echo e($flash['type']); ?>">
+                    <?php echo e($flash['pesan']); ?></p>
                     <?php endif; ?>
                     
             <form id="form-tambah" method="post" action="proses_tambah.php" novalidate>
+                <?php echo csrf_field(); ?>
                 <p>
                     <label for="no_anggota">No. Anggota</label>
                     <input type="text" id="no_anggota" name="no_anggota" required>

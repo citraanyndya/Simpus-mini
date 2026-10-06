@@ -25,14 +25,15 @@ if (!$anggota) {
         <section>
             <h2>Edit Anggota</h2>
             <?php if ($flash): ?>
-                <p class="flash flash-<?php echo $flash['type']; ?>"<?php echo $flash['pesan']; ?>"></p>
+                <p class="flash flash-<?php echo e($flash['type']); ?>"<?php echo e($flash['pesan']); ?>"></p>
             <?php endif; ?>
 
             <form id="form-tambah" method="post" action="proses_edit.php" novalidate>
+                <?php echo csrf_field(); ?>
                 <input type="hidden" name="id" value="<?php echo $anggota['id']; ?>">
                 <p>
                     <label for="no_anggota">No_anggota</label><br>
-                    <input type="text" id="no_anggota" name="no_anggota" value="<?php echo $anggota['no_anggota']; ?>" required>
+                    <input type="text" id="no_anggota" name="no_anggota" value="<?php echo e($anggota['no_anggota']); ?>" required>
                 </p>
                 <p>
                     <label for="nama">Nama</label><br>
