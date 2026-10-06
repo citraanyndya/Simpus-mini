@@ -1,5 +1,4 @@
 <?php
-require __DIR__ . '/../includes/auth.php';
 $page_title = "Daftar Buku";
 include __DIR__ . '/../includes/header.php';
 require __DIR__ . '/../includes/koneksi.php';
@@ -42,7 +41,7 @@ $totalPages = max(1, (int) ceil($totalRows / $perPage));
                 <form method="get" action="list.php">
                     <span>
                         <label for="search-input">Cari Judul Buku atau Pengarang</label><br>
-                        <input type="text" id="search-input" name="q" value="<?php echo $keyword; ?>" placeholder="Ketik judul buku atau Pengarang...">
+                        <input type="text" id="search-input" name="q" value="<?php echo e($keyword); ?>" placeholder="Ketik judul buku atau Pengarang...">
                     </span>
                     <button type="submit">Cari</button>
                 </form>
@@ -69,8 +68,8 @@ $totalPages = max(1, (int) ceil($totalRows / $perPage));
                     <?php else: ?>
                         <?php foreach ($daftarBuku as $buku): ?>
                         <tr>
-                            <td><?php echo $buku['judul']; ?></td>
-                            <td><?php echo $buku['pengarang']; ?></td>
+                            <td><?php echo e($buku['judul']); ?></td>
+                            <td><?php echo e($buku['pengarang']); ?></td>
                             <td><?php echo $buku['tahun']; ?></td>
                             <td><?php echo $buku['stok']; ?></td>
                             <td><?php echo $buku['kategori']; ?></td>

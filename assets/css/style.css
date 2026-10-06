@@ -181,7 +181,7 @@ form label {
     color: #444;
 }
 
-form input,
+form input:not([type="checkbox"]),
 form select {
     width: 100%;
     max-width: 400px;
@@ -189,6 +189,11 @@ form select {
     border: 1px solid #cdd4da;
     border-radius: 4px;
     font-size: 1rem;
+}
+
+form input[type="checkbox"] {
+    width: auto;
+    margin-right: 8px;
 }
 
 form button[type="submit"] {

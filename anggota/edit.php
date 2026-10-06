@@ -36,23 +36,23 @@ if (!$anggota) {
                 </p>
                 <p>
                     <label for="nama">Nama</label><br>
-                    <input type="text" id="nama" name="nama" value="<?php echo $anggota['nama']; ?>" required>
+                    <input type="text" id="nama" name="nama" value="<?php echo e($anggota['nama']); ?>" required>
                 </p>
                 <p>
                     <label for="alamat">Alamat</label><br>
-                    <input type="text" id="alamat" name="alamat" value="<?php echo $anggota['alamat']; ?>" required>
+                    <input type="text" id="alamat" name="alamat" value="<?php echo e($anggota['alamat']); ?>" required>
                 </p>
                 <p>
                     <label for="no_hp">No HP</label><br>
-                    <input type="text" id="no_hp" name="no_hp" value="<?php echo $anggota['no_hp']; ?>" required>
+                    <input type="text" id="no_hp" name="no_hp" value="<?php echo e($anggota['no_hp']); ?>" required>
                 </p>
                 <p>
                     <label for="email">Email</label><br>
-                    <input type="email" id="email" name="email" value="<?php echo $anggota['email']; ?>">
+                    <input type="email" id="email" name="email" value="<?php echo e($anggota['email']); ?>">
                 </p>
                 <p>
                     <label for="tahun_bergabung">Tahun Bergabung</label><br>
-                    <input type="number" id="tahun_bergabung" name="tahun_bergabung" value="<?php echo $anggota['tahun_bergabung']; ?>" required>
+                    <input type="number" id="tahun_bergabung" name="tahun_bergabung" value="<?php echo e($anggota['tahun_bergabung']); ?>" required>
                 </p>
                 <button type="submit">Simpan Perubahan</button>
             </form>
