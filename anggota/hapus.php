@@ -1,5 +1,11 @@
 <?php
 require __DIR__ . '/../includes/auth.php';
+
+if ($_SESSION['role'] !== 'admin') {
+    header('Location: list.php');
+    exit;
+}
+
 require __DIR__ . '/../includes/koneksi.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
