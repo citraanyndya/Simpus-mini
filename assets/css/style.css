@@ -319,6 +319,17 @@ footer {
     border-color: #1d5b8a;
 }
 
+.auth-status {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #fff;
+}
+
+.auth-status a {
+    color: #fff;
+    text-decoration: underline;
+}
 
 /* ===== Responsive Breakpoints ===== */
 
