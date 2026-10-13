@@ -18,9 +18,10 @@ if ($anggotaId !== '') {
 
     if ($anggotaTerpilih) {
         $stmt = $pdo->prepare(
-            "SELECT b.judul, p.tanggal_pinjam, p.tanggal_kembali, p.status
+            "SELECT b.judul, a.no_hp, p.tanggal_pinjam, p.tanggal_kembali, p.status
              FROM peminjaman p
              JOIN buku b ON b.id = p.buku_id
+             JOIN anggota a ON a.id = p.anggota_id
              WHERE p.anggota_id = :id
              ORDER BY p.tanggal_pinjam DESC"
         );
@@ -56,6 +57,7 @@ if ($anggotaId !== '') {
                 <thead>
                     <tr>
                         <th>Buku</th>
+                        <th>No HP</th>
                         <th>Pinjam</th>
                         <th>Kembali</th>
                         <th>Status</th>
@@ -70,6 +72,7 @@ if ($anggotaId !== '') {
                         <?php foreach ($riwayat as $r): ?>
                         <tr>
                             <td><?php echo e($r['judul']); ?></td>
+                            <td><?php echo e($r['no_hp']); ?></td>
                             <td><?php echo e($r['tanggal_pinjam']); ?></td>
                             <td><?php echo e($r['tanggal_kembali'] ?? '-'); ?></td>
                             <td>

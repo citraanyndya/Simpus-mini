@@ -13,7 +13,7 @@ $keyword = trim($_GET['q'] ?? '');
 
 if ($keyword !== '') {
     $stmt = $pdo->prepare("
-        SELECT p.id, a.nama AS nama_anggota, b.judul AS judul_buku, p.tanggal_pinjam, p.tanggal_jatuh_tempo
+        SELECT p.id, a.nama AS nama_anggota, a.no_hp, b.judul AS judul_buku, p.tanggal_pinjam, p.tanggal_jatuh_tempo
         FROM peminjaman p
         JOIN anggota a ON p.anggota_id = a.id
         JOIN buku b ON p.buku_id = b.id
@@ -24,7 +24,7 @@ if ($keyword !== '') {
     $stmt->execute(['kw' => '%' . $keyword . '%']);
 } else {
     $stmt = $pdo->prepare("
-        SELECT p.id, a.nama AS nama_anggota, b.judul AS judul_buku, p.tanggal_pinjam, p.tanggal_jatuh_tempo
+        SELECT p.id, a.nama AS nama_anggota, a.no_hp, b.judul AS judul_buku, p.tanggal_pinjam, p.tanggal_jatuh_tempo
         FROM peminjaman p
         JOIN anggota a ON p.anggota_id = a.id
         JOIN buku b ON p.buku_id = b.id
@@ -59,6 +59,7 @@ $daftarAktif = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <tr>
                 <th>No</th>
                 <th>Anggota</th>
+                <th>No HP</th>
                 <th>Buku</th>
                 <th>Tanggal Pinjam</th>
                 <th>Jatuh Tempo</th>
@@ -75,6 +76,7 @@ $daftarAktif = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <tr>
                         <td><?= $index + 1; ?></td>
                         <td><?= htmlspecialchars($row['nama_anggota'] ?? ''); ?></td>
+                        <td><?= htmlspecialchars($row['no_hp'] ?? ''); ?></td>
                         <td><?= htmlspecialchars($row['judul_buku'] ?? ''); ?></td>
                         <td><?= htmlspecialchars($row['tanggal_pinjam'] ?? ''); ?></td>
                         <td><?= htmlspecialchars($row['tanggal_jatuh_tempo'] ?? ''); ?></td>
