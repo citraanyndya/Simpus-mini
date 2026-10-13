@@ -10,8 +10,10 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 csrf_verify();
 
-$id = $_POST['id'] ?? null;
-if (!$id) {
+$id = (int) ($_POST['peminjaman_id'] ?? $_POST['id'] ?? 0);
+
+if ($id <= 0) {
+    $_SESSION['flash'] = ['type' => 'error', 'pesan' => 'ID peminjaman tidak valid.'];
     header('Location: kembali.php');
     exit;
 }
@@ -19,11 +21,11 @@ if (!$id) {
 try {
     $pdo->beginTransaction();
 
-    $stmt = $pdo->prepare("SELECT buku_id, status FROM peminjaman WHERE id = :id FOR UPDATE");
+    $stmt = $pdo->prepare("SELECT buku_id, tanggal_kembali FROM peminjaman WHERE id = :id FOR UPDATE");
     $stmt->execute(['id' => $id]);
     $trx = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if (!$trx || $trx['status'] !== 'dipinjam') {
+    if (!$trx || $trx['tanggal_kembali'] !== null) {
         throw new Exception('Transaksi tidak ditemukan atau sudah dikembalikan.');
     }
 
@@ -38,7 +40,9 @@ try {
     $pdo->commit();
     $_SESSION['flash'] = ['type' => 'success', 'pesan' => 'Buku berhasil dikembalikan.'];
 } catch (Exception $e) {
-    $pdo->rollBack();
+    if ($pdo->inTransaction()) {
+        $pdo->rollBack();
+    }
     $_SESSION['flash'] = ['type' => 'error', 'pesan' => 'Gagal memproses pengembalian: ' . $e->getMessage()];
 }
 

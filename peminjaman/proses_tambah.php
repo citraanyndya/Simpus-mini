@@ -1,51 +1,40 @@
 <?php
 require __DIR__ . '/../includes/auth.php';
+require __DIR__ . '/../includes/helpers.php';
 require __DIR__ . '/../includes/csrf.php';
 require __DIR__ . '/../includes/koneksi.php';
 
 csrf_verify();
 
-$anggotaId = $_POST['anggota_id'] ?? '';
-$bukuId = $_POST['buku_id'] ?? '';
+$anggotaId = (int) ($_POST['anggota_id'] ?? $_POST['anggota_id'] ?? 0);
+$bukuId    = (int) ($_POST['buku_id'] ?? $_POST['buku_id'] ?? 0);
 
-if ($anggotaId === '' || $bukuId === '') {
+if ($anggotaId <= 0 || $bukuId <= 0) {
     $_SESSION['flash'] = ['type' => 'error', 'pesan' => 'Anggota dan buku wajib dipilih.'];
     header('Location: tambah.php');
     exit;
 }
 
-if (!ctype_digit((string) $anggotaId) || !ctype_digit((string) $bukuId)) {
-    $_SESSION['flash'] = ['type' => 'error', 'pesan' => 'Data tidak valid.'];
-    header('Location: tambah.php');
-    exit;
-}
-
 try {
+    $stmt_cek = $pdo->prepare("
+        SELECT COUNT(*) 
+        FROM peminjaman 
+        WHERE anggota_id = :anggota_id 
+          AND tanggal_kembali IS NULL 
+          AND (CURRENT_DATE - tanggal_pinjam) > 14
+    ");
+    $stmt_cek->execute(['anggota_id' => $anggotaId]);
+    if ($stmt_cek->fetchColumn() > 0) {
+        $_SESSION['flash'] = [
+            'type' => 'error', 
+            'pesan' => 'Gagal meminjam: Anggota ini memiliki pinjaman yang terlambat lebih dari 14 hari!'
+        ];
+        header('Location: tambah.php');
+        exit;
+    }
+
     $pdo->beginTransaction();
 
-$id_anggota = (int) ($_POST['id_anggota'] ?? 0);
-
-$stmt_cek = $pdo->prepare(
-    "SELECT COUNT(*) 
-    FROM peminjaman 
-    WHERE id_anggota = :id_anggota 
-      AND tanggal_kembali IS NULL 
-      AND (CURRENT_DATE - tanggal_pinjam) > 14"
-);
-$stmt_cek->execute(['id_anggota' => $id_anggota]);
-$terlambat = $stmt_cek->fetchColumn();
-
-if ($terlambat > 0) {
-    $_SESSION['flash'] = [
-        'type' => 'error', 
-        'pesan' => 'Gagal meminjam: Anggota ini memiliki pinjaman yang terlambat lebih dari 14 hari!'
-    ];
-    header('Location: tambah.php');
-    exit;
-}
-
-    // Kunci baris buku (FOR UPDATE) agar stok tidak berubah oleh transaksi lain
-    // di tengah proses ini — mencegah stok menjadi negatif akibat race condition.
     $cek = $pdo->prepare("SELECT stok FROM buku WHERE id = :id FOR UPDATE");
     $cek->execute(['id' => $bukuId]);
     $buku = $cek->fetch(PDO::FETCH_ASSOC);
@@ -54,11 +43,14 @@ if ($terlambat > 0) {
         throw new Exception('Stok buku tidak tersedia.');
     }
 
-    $insert = $pdo->prepare(
-        "INSERT INTO peminjaman (buku_id, anggota_id, tanggal_pinjam, status)
-         VALUES (:buku_id, :anggota_id, CURRENT_DATE, 'dipinjam')"
-    );
-    $insert->execute(['buku_id' => $bukuId, 'anggota_id' => $anggotaId]);
+    $insert = $pdo->prepare("
+        INSERT INTO peminjaman (buku_id, anggota_id, tanggal_pinjam, tanggal_jatuh_tempo)
+        VALUES (:buku_id, :anggota_id, CURRENT_DATE, CURRENT_DATE + INTERVAL '14 days')
+    ");
+    $insert->execute([
+        'buku_id'    => $bukuId, 
+        'anggota_id' => $anggotaId
+    ]);
 
     $update = $pdo->prepare("UPDATE buku SET stok = stok - 1 WHERE id = :id");
     $update->execute(['id' => $bukuId]);
@@ -68,8 +60,11 @@ if ($terlambat > 0) {
     $_SESSION['flash'] = ['type' => 'success', 'pesan' => 'Peminjaman berhasil dicatat.'];
     header('Location: ../index.php');
     exit;
+
 } catch (Exception $e) {
-    $pdo->rollBack();
+    if ($pdo->inTransaction()) {
+        $pdo->rollBack();
+    }
     $_SESSION['flash'] = ['type' => 'error', 'pesan' => 'Gagal mencatat peminjaman: ' . $e->getMessage()];
     header('Location: tambah.php');
     exit;

@@ -1,5 +1,6 @@
 <?php
 require __DIR__ . '/../includes/auth.php';
+require __DIR__ . '/../includes/helpers.php';
 $page_title = "Riwayat Peminjaman";
 include __DIR__ . '/../includes/header.php';
 require __DIR__ . '/../includes/koneksi.php';
@@ -63,15 +64,21 @@ if ($anggotaId !== '') {
                 <tbody>
                     <?php if (empty($riwayat)): ?>
                     <tr>
-                        <td colspan="4">Belum ada riwayat peminjaman.</td>
+                        <td colspan="4" style="text-align: center;">Belum ada riwayat peminjaman.</td>
                     </tr>
                     <?php else: ?>
                         <?php foreach ($riwayat as $r): ?>
                         <tr>
                             <td><?php echo e($r['judul']); ?></td>
-                            <td><?php echo $r['tanggal_pinjam']; ?></td>
-                            <td><?php echo $r['tanggal_kembali'] ?? '-'; ?></td>
-                            <td><?php echo $r['status'] === 'dipinjam' ? 'Dipinjam' : 'Selesai'; ?></td>
+                            <td><?php echo e($r['tanggal_pinjam']); ?></td>
+                            <td><?php echo e($r['tanggal_kembali'] ?? '-'); ?></td>
+                            <td>
+                                <?php if (!empty($r['tanggal_kembali']) || $r['status'] === 'dikembalikan'): ?>
+                                    <span class="badge badge-success">Dikembalikan</span>
+                                <?php else: ?>
+                                    <span class="badge badge-warning">Dipinjam</span>
+                                <?php endif; ?>
+                            </td>
                         </tr>
                         <?php endforeach; ?>
                     <?php endif; ?>
