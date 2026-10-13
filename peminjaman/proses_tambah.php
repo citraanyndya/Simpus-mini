@@ -23,6 +23,27 @@ if (!ctype_digit((string) $anggotaId) || !ctype_digit((string) $bukuId)) {
 try {
     $pdo->beginTransaction();
 
+$id_anggota = (int) ($_POST['id_anggota'] ?? 0);
+
+$stmt_cek = $pdo->prepare(
+    "SELECT COUNT(*) 
+    FROM peminjaman 
+    WHERE id_anggota = :id_anggota 
+      AND tanggal_kembali IS NULL 
+      AND (CURRENT_DATE - tanggal_pinjam) > 14"
+);
+$stmt_cek->execute(['id_anggota' => $id_anggota]);
+$terlambat = $stmt_cek->fetchColumn();
+
+if ($terlambat > 0) {
+    $_SESSION['flash'] = [
+        'type' => 'error', 
+        'pesan' => 'Gagal meminjam: Anggota ini memiliki pinjaman yang terlambat lebih dari 14 hari!'
+    ];
+    header('Location: tambah.php');
+    exit;
+}
+
     // Kunci baris buku (FOR UPDATE) agar stok tidak berubah oleh transaksi lain
     // di tengah proses ini — mencegah stok menjadi negatif akibat race condition.
     $cek = $pdo->prepare("SELECT stok FROM buku WHERE id = :id FOR UPDATE");
